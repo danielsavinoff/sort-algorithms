@@ -1,4 +1,5 @@
 # Sorting algorithms
+Visit the [demo](https://danielsavinoff.github.io/sort-algorithms/)
 
 ### Idea of this project
 While some could read a book and understand it easily, other might struggle to imagine
