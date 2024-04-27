@@ -5,7 +5,8 @@ type TProgress = {
   i?: number,
   j?: number,
   previousLowestNumIndex?: number,
-  lowestNumIndex?: number
+  lowestNumIndex?: number,
+  swap?: boolean
 }
 
 function SelectionSort() {
@@ -41,13 +42,23 @@ function SelectionSort() {
         setActive(j)
       }
 
+      setProgress((prevProgress) => ({
+        ...prevProgress,
+        swap: false
+      }))
+
       if (progress.lowestNumIndex !== i && progress.j! > newArr.length - 1) {
         let higherNumber = newArr[i]
 
         newArr[i] = newArr[progress.lowestNumIndex!]
         newArr[progress.lowestNumIndex!] = higherNumber
-
+        console.log('swap')
         setSteps(prev => prev += 1)
+        setProgress((prevProgress) => ({
+          ...prevProgress,
+          previousLowestNumIndex: progress.lowestNumIndex,
+          swap: true
+        }))
       }
     }
 
@@ -57,7 +68,6 @@ function SelectionSort() {
       ...prevProgress, 
       i: (prevProgress.i || 0) + (next ? 1 : 0),
       j: (next ? undefined : prevProgress.j),
-      previousLowestNumIndex: next ? prevProgress.lowestNumIndex : prevProgress.previousLowestNumIndex,
       lowestNumIndex: (next ? undefined : prevProgress.lowestNumIndex)
     }))
     setData(newArr)
@@ -79,7 +89,7 @@ function SelectionSort() {
       >
         {data.map((e, i) => {
           const isSorted = ((typeof progress.i !== 'undefined') && (i < progress.i) || (i === progress.i && progress.i === data.length - 1))
-          const isPreviousFirst = typeof progress.i !== 'undefined' && i === progress.i - 1
+          const isBeingSwapped = typeof progress.i !== 'undefined' && i === progress.i - 1 && progress.swap
 
           let color
 
@@ -98,7 +108,7 @@ function SelectionSort() {
                   height: `${e}%`,
                 }}
                 className={
-                  `w-full transition-color-transform rounded-tl-sm rounded-tr-sm ${color} ${isPreviousFirst ? 'animate-slide-left' : ''} ${progress.previousLowestNumIndex === i ? 'animate-slide-right' : ''}`
+                  `w-full transition-color-transform rounded-tl-sm rounded-tr-sm ${color} ${isBeingSwapped ? 'animate-slide-left' : ''} ${progress.previousLowestNumIndex === i ? 'animate-slide-right' : ''}`
                 }
                 key={i}
               />

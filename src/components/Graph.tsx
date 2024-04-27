@@ -52,7 +52,7 @@ function Graph({
   children
 }: GraphProps) {
   const [isRunning, setIsRunning] = useState<boolean>(false)
-  const [delay, setDelay] = useState<number>(100)
+  const [delay, setDelay] = useState<number>(500)
 
   useEffect(() => {
     resetFn(randomize())
