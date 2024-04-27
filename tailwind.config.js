@@ -63,14 +63,27 @@ module.exports = {
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
+        },
+        "slide-left": {
+          from: { transform: "translateX(50%)" },
+          to: { transform: "translateX(0%)" },
+        },
+        "slide-right": {
+          from: { transform: "translateX(-50%)" },
+          to: { transform: "translateX(0%)" },
         }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "slide-left": "slide-left 0.4s ease-out",
+        "slide-right": "slide-right 0.4s ease-out"
       },
       gridTemplateColumns: {
         'main': 'repeat(2, minmax(700px, 1fr))'
+      },
+      transitionProperty: {
+        "color-transform": "color, background-color, border-color, text-decoration-color, fill, stroke, transform"
       }
     },
   },

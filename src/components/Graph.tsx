@@ -25,7 +25,7 @@ type THashTable = {
   [key: string | number]: any
 }
 
-function randomize(size = 24) {
+function randomize(size = 2**4) {
   const temp: THashTable = {}
   const nums = new Array()
 
