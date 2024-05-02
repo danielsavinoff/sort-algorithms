@@ -24,4 +24,5 @@ dist-ssr
 *.sw?
 
 # Temp
-BubbleSort.tsx
+bubbleSort.ts
+Controls.tsx

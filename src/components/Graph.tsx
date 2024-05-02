@@ -1,4 +1,5 @@
 import { useEffect, useState} from "react"
+import { useInterval } from "react-use"
 
 import { Play, RotateCcw, Cog, Pause } from "lucide-react"
 
@@ -10,15 +11,13 @@ import {
 } from "@/components/ui/popover"
 import { Input } from '@/components/ui/input'
 import { Label } from "@/components/ui/label"
-import { useInterval } from "react-use"
+
+import Bar, { TBarAnimation, TBarColor } from "@/components/Bar"
+import { Snapshot } from "@/utils/snapshot"
 
 type GraphProps = {
   title?: string,
-  description?: string,
-  stepsCount: number,
-  playFn: () => void,
-  resetFn: (value: number[]) => void,
-  children?: React.ReactNode,
+  sort: (arr: number[]) => Snapshot[],
 }
 
 type THashTable = {
@@ -45,21 +44,37 @@ function randomize(size = 2**4) {
 
 function Graph({
   title,
-  description,
-  stepsCount,
-  playFn,
-  resetFn,
-  children
+  sort
 }: GraphProps) {
+  const [snapshots, setSnapshots] = useState<Snapshot[]>([])
+  const [currentSnapshotIndex, setCurrentSnapshotIndex] = useState<number>(-1)
+  
+  const [initialData, setInitialData] = useState<number[]>([])
+
   const [isRunning, setIsRunning] = useState<boolean>(false)
   const [delay, setDelay] = useState<number>(500)
 
-  useEffect(() => {
-    resetFn(randomize())
-  }, [])
+  // Set every needed variable on mount of the component
+  useEffect(reset, [])
 
-  useInterval(playFn, isRunning ? delay : null)
+  // If the current snapshot is the last in the collection stop the interval
+  useEffect(() => {
+    if (currentSnapshotIndex >= snapshots.length - 1) setIsRunning(prev => !prev)
+  }, [currentSnapshotIndex])
+
+  // If play button is pressed change the index of the current snapshot
+  useInterval(() => {
+    setCurrentSnapshotIndex(prev => prev += 1)
+  }, isRunning ? delay : null)
   
+  function reset() {
+    const newData = randomize()
+    
+    setInitialData(newData)
+    setSnapshots(sort(newData.slice()))
+    setCurrentSnapshotIndex(-1)
+  }
+
   return(
     <div className="grid gap-8 h-full w-full">
       <div className="flex flex-col gap-4 h-max">
@@ -69,7 +84,10 @@ function Graph({
             <Button 
               variant="outline" 
               size="icon"
-              onClick={() => setIsRunning(prev => !prev)}
+              onClick={() => {
+                if (currentSnapshotIndex >= snapshots.length - 1) reset()
+                setIsRunning(prev => !prev)
+              }}
             >
               {!isRunning ? (
                 <Play className="h-4 w-4 fill-primary" />
@@ -80,7 +98,7 @@ function Graph({
             <Button 
               variant="outline" 
               size="icon"
-              onClick={() => resetFn(randomize())}
+              onClick={reset}
             >
               <RotateCcw className="h-4 w-4"/>
             </Button>
@@ -89,7 +107,6 @@ function Graph({
                 <Button 
                   variant="outline" 
                   size="icon"
-                  onClick={() => undefined}
                 >
                   <Cog className="h-4 w-4"/>
                 </Button>
@@ -118,12 +135,35 @@ function Graph({
           </div>
         </div>
         <div className="grid gap-2">
-          <p className="text-muted-foreground text-lg leading-none">{description}</p>
-          <p className="text-muted-foreground text-lg leading-none">Steps: {stepsCount}</p>
+          <p className="text-muted-foreground text-lg leading-none">Steps: {currentSnapshotIndex + 1}</p>
         </div>
       </div>
       <div className="border-b border-b-border pl-4 pr-4 flex gap-4 items-end">
-        {children}
+        {currentSnapshotIndex < 0 ? (
+          initialData.map(number => {
+            return <Bar elementToSort={number} color="bg-primary/25" />
+          })
+        ) : (
+          snapshots[currentSnapshotIndex].data.map((number, i) => {
+            const currentSnapshot = snapshots[currentSnapshotIndex]
+
+            let color: TBarColor = "bg-primary/25"
+
+            if (currentSnapshot.selected.includes(i)) color = "bg-primary/60"
+            
+            if (
+              currentSnapshot.sorted.includes(i) ||
+              currentSnapshot.next === i
+            ) color = "bg-primary/100"
+
+            let animation: TBarAnimation
+
+            if (currentSnapshot.slideLeft === i) animation = "animate-slide-left"
+            else if (currentSnapshot.slideRight === i) animation = "animate-slide-right"
+
+            return <Bar elementToSort={number} color={color} animation={animation} />
+          })
+        )}
       </div>
     </div>
   )
