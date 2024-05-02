@@ -65,11 +65,11 @@ module.exports = {
           to: { height: "0" },
         },
         "slide-left": {
-          from: { transform: "translateX(75%)" },
+          from: { transform: "translateX(50%)" },
           to: { transform: "translateX(0%)" },
         },
         "slide-right": {
-          from: { transform: "translateX(-75%)" },
+          from: { transform: "translateX(-50%)" },
           to: { transform: "translateX(0%)" },
         }
       },
