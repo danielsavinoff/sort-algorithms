@@ -58,9 +58,9 @@ function Graph({
   useEffect(reset, [])
 
   // If the current snapshot is the last in the collection stop the interval
-  useEffect(() => {
-    if (currentSnapshotIndex >= snapshots.length - 1) setIsRunning(prev => !prev)
-  }, [currentSnapshotIndex])
+  if (currentSnapshotIndex >= snapshots.length - 1 && isRunning) {
+    setIsRunning(prev => !prev)
+  }
 
   // If play button is pressed change the index of the current snapshot
   useInterval(() => {
