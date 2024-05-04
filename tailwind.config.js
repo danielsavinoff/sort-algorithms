@@ -79,9 +79,6 @@ module.exports = {
         "slide-left": "slide-left 0.4s ease-out",
         "slide-right": "slide-right 0.4s ease-out"
       },
-      gridTemplateColumns: {
-        'main': 'repeat(2, minmax(700px, 1fr))'
-      },
       transitionProperty: {
         "color-transform": "color, background-color, border-color, text-decoration-color, fill, stroke, transform"
       }

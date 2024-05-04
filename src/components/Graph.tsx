@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label"
 import Bar, { TBarAnimation, TBarColor } from "@/components/Bar"
 import { Snapshot } from "@/utils/snapshot"
 
-type GraphProps = {
+export type GraphProps = {
   title?: string,
   sort: (arr: number[]) => Snapshot[],
 }
