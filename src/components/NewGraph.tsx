@@ -29,7 +29,7 @@ import { useGraphListContext } from "@/providers/GraphListProvider"
 import selectionSort from "@/utils/selectionSort"
 
 function NewGraph() {
-  const {setGraphs} = useGraphListContext()
+  const {setGraphList} = useGraphListContext()
 
   const [currentOption, setCurrentOption] = useState<string>('')
 
@@ -47,9 +47,7 @@ function NewGraph() {
     <div className="w-full h-full grid items-center justify-center">
       <Dialog>
         <DialogTrigger asChild>
-          <Button 
-            variant={"ghost"}
-          >
+          <Button variant={"ghost"}>
             <Plus className="h-8 w-8 text-primary/25" />
           </Button>
         </DialogTrigger>
@@ -70,7 +68,7 @@ function NewGraph() {
               <Button
                 variant={"default"}
                 size={"sm"}
-                onClick={() => setGraphs(prev => [...prev, newGraph])}
+                onClick={() => setGraphList(prev => [...prev, newGraph])}
               > 
                 Add
               </Button>

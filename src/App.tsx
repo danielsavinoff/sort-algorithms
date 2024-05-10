@@ -3,12 +3,17 @@ import AddGraph from "@/components/NewGraph"
 import { useGraphListContext } from "@/providers/GraphListProvider"
 
 function App() {
-  const {graphs} = useGraphListContext()
-
+  const {graphList} = useGraphListContext()
+  
   return (
     <div className="w-full h-dvh p-8 gap-16 grid auto-rows-fr grid-cols-[repeat(auto-fit,minmax(min(720px,100%),1fr))]">
-      {graphs.map(graph => <Graph title={graph.title} sort={graph.sort} />)}
-      {graphs.length < 4 && <AddGraph />}
+      {graphList.map((graph, i) => <Graph
+        title={graph.title}
+        sort={graph.sort}
+        indexInList={i}
+        key={i}
+      />)}
+      {graphList.length < 4 && <AddGraph />}
     </div>
   )
 }

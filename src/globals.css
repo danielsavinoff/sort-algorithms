@@ -80,3 +80,8 @@
   color: hsl(var(--foreground));
 }
 
+@media (max-width: 1567px) {
+  #root > * > *:nth-child(3) {
+    display: none;
+  }
+}

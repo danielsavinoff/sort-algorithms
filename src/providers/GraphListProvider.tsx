@@ -6,13 +6,13 @@ type GraphListProviderProps = {
 }
 
 type GraphListProviderState = {
-  graphs: GraphProps[],
-  setGraphs: React.Dispatch<React.SetStateAction<GraphProps[]>>
+  graphList: GraphProps[],
+  setGraphList: React.Dispatch<React.SetStateAction<GraphProps[]>>
 } 
 
 const initialState = {
-  graphs: new Array(),
-  setGraphs: () => null
+  graphList: [],
+  setGraphList: () => null
 }
 
 const GraphListContextProvider = createContext<GraphListProviderState>(initialState)
@@ -20,10 +20,10 @@ const GraphListContextProvider = createContext<GraphListProviderState>(initialSt
 function GraphListProvider({
   children
 }: GraphListProviderProps) {
-  const [graphs, setGraphs] = useState<GraphProps[]>([])
+  const [graphList, setGraphList] = useState<GraphProps[]>([])
 
   return(
-    <GraphListContextProvider.Provider value={{graphs, setGraphs}}>
+    <GraphListContextProvider.Provider value={{graphList, setGraphList}}>
       {children}
     </GraphListContextProvider.Provider>
   )
