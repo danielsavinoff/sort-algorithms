@@ -22,6 +22,7 @@ import { randomize } from "@/lib/randomize"
 export interface GraphProps {
   title?: string,
   sort: (arr: number[]) => Snapshot[],
+  key: string
 }
 
 
@@ -83,7 +84,7 @@ function Graph({
         {currentSnapshotIndex < 0 ? (
           initialData.map(number => <Bar 
             element={number} 
-            color="bg-primary/25" 
+            color="bg-primary/25"
           />)
         ) : (
           snapshots[currentSnapshotIndex].data.map((number, i) => {

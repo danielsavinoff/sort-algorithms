@@ -39,7 +39,8 @@ function NewGraph() {
     case 'selection-sort':
       newGraph = {
         sort: selectionSort,
-        title: 'Selection Sort'
+        title: 'Selection Sort',
+        key: crypto.randomUUID()
       }
   }
   

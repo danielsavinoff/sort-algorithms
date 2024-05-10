@@ -11,7 +11,7 @@ function App() {
         title={graph.title}
         sort={graph.sort}
         indexInList={i}
-        key={i}
+        key={graph.key}
       />)}
       {graphList.length < 4 && <AddGraph />}
     </div>
