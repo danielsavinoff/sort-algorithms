@@ -17,7 +17,9 @@ import {
 import { 
   Select, 
   SelectContent, 
+  SelectGroup, 
   SelectItem, 
+  SelectLabel, 
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select"
@@ -31,6 +33,8 @@ import selectionSort from "@/utils/selectionSort"
 function NewGraph() {
   const {setGraphList} = useGraphListContext()
 
+  const [isEmptyErrorVisible, setIsEmptyErrorVisible] = useState<boolean>(false)
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
   const [currentOption, setCurrentOption] = useState<string>('')
 
   let newGraph: GraphProps
@@ -46,7 +50,7 @@ function NewGraph() {
   
   return(
     <div className="w-full h-full grid items-center justify-center">
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={(state) => setIsDialogOpen(state)}>
         <DialogTrigger asChild>
           <Button variant={"ghost"}>
             <Plus className="h-8 w-8 text-primary/25" />
@@ -56,24 +60,38 @@ function NewGraph() {
           <DialogHeader>
             <DialogTitle>Choose sort algorithm</DialogTitle>
           </DialogHeader>
-          <Select onValueChange={(val) => setCurrentOption(val)}>
-            <SelectTrigger>
-              <SelectValue placeholder='Choose any option...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="selection-sort">Selection Sort</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col gap-2">
+            <Select 
+              onValueChange={(val) => {
+                setCurrentOption(val)
+                setIsEmptyErrorVisible(false)
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder='Choose any option...' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Sort algorithms</SelectLabel>
+                  <SelectItem value="selection-sort">Selection Sort</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            {isEmptyErrorVisible && <p className="text-destructive font-semibold text-sm">Sort algorithm is not choosen</p>}
+          </div>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button
-                variant={"default"}
-                size={"sm"}
-                onClick={() => setGraphList(prev => [...prev, newGraph])}
-              > 
-                Add
-              </Button>
-            </DialogClose>
+            <Button
+              variant={"default"}
+              size={"sm"}
+              onClick={() => {
+                if (!currentOption) return setIsEmptyErrorVisible(true)
+
+                setGraphList(prev => [...prev, newGraph])
+                setIsDialogOpen(false)
+              }}
+            > 
+              Add
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

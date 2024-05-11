@@ -13,7 +13,7 @@ function App() {
         indexInList={i}
         key={graph.key}
       />)}
-      {graphList.length < 4 && <AddGraph />}
+      {graphList.length < 4 && <AddGraph key={crypto.randomUUID()}/>}
     </div>
   )
 }
