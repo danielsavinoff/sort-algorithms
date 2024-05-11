@@ -66,6 +66,7 @@ function NewGraph() {
                 setCurrentOption(val)
                 setIsEmptyErrorVisible(false)
               }}
+              defaultValue={currentOption}
             >
               <SelectTrigger>
                 <SelectValue placeholder='Choose any option...' />
@@ -77,7 +78,7 @@ function NewGraph() {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            {isEmptyErrorVisible && <p className="text-destructive font-semibold text-sm">Sort algorithm is not choosen</p>}
+            {isEmptyErrorVisible && <p className="text-destructive font-semibold text-sm">Sort algorithm is not selected</p>}
           </div>
           <DialogFooter>
             <Button
