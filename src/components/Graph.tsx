@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { useInterval } from "react-use"
 
 import { Play, RotateCcw, Cog, Pause, X } from "lucide-react"
@@ -25,7 +25,6 @@ export interface GraphProps {
   sort: (arr: number[]) => Snapshot[],
   key: string
 }
-
 
 function Graph({
   title,
@@ -134,7 +133,7 @@ function Graph({
 
 export default Graph
 
-function Controls({
+const Controls = ({
   run,
   reset,
   remove,
@@ -152,28 +151,27 @@ function Controls({
   delay: number,
   isRunning: boolean,
   explicit: boolean
-}) {
-  return(
-    <div className="flex gap-2">
-      <Button variant="outline" size="icon" onClick={run}>
-        {!isRunning ? (
-          <Play className="h-4 w-4 fill-primary" />
-        ) : (
-          <Pause className="h-4 w-4 fill-primary" />
-        )}
-      </Button>
-      <Button variant="outline" size="icon" onClick={reset}>
-        <RotateCcw className="h-4 w-4"/>
-      </Button>
-      <SettingsButton delay={delay} setDelay={setDelay} explicit={explicit} setExplicit={setExplicit}/>
-      <Button variant={"outline"} size={"icon"} onClick={remove}>
-        <X className="h-4 w-4" />
-      </Button>
-    </div>
-  )
-}
+}) => (
+  <div className="flex gap-2">
+    <Button variant="outline" size="icon" onClick={run}>
+      {!isRunning ? (
+        <Play className="h-4 w-4 fill-primary" />
+      ) : (
+        <Pause className="h-4 w-4 fill-primary" />
+      )}
+    </Button>
+    <Button variant="outline" size="icon" onClick={reset}>
+      <RotateCcw className="h-4 w-4"/>
+    </Button>
+    <SettingsButton delay={delay} setDelay={setDelay} explicit={explicit} setExplicit={setExplicit}/>
+    <Button variant={"outline"} size={"icon"} onClick={remove}>
+      <X className="h-4 w-4" />
+    </Button>
+  </div>
+)
 
-function SettingsButton({
+
+const SettingsButton = ({
   delay,
   setDelay,
   explicit,
@@ -183,42 +181,40 @@ function SettingsButton({
   delay: number,
   explicit: boolean,
   setExplicit: (checked: boolean) => void
-}) {
-  return(
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Cog className="h-4 w-4"/>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <h4 className="font-medium leading-none">Settings</h4>
-            <p className="text-sm text-muted-foreground">
-              Change how the algorithm is being executed
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
-            <Label htmlFor="delay" className="text-nowrap">Delay (ms)</Label>
-            <Input
-              id="delay"
-              type="number"
-              className="col-span-2 h-8"
-              value={delay}
-              onChange={(e) => setDelay(parseInt(e.target.value))}
-            />
-            
-          </div>
-          <div className="flex items-center gap-4">
-          <Label htmlFor="show-numbers">Explicitly show numbers</Label>
-            <Checkbox id="show-numbers" checked={explicit} onCheckedChange={(state) => setExplicit(!!state)} />
-          </div>
+}) => (
+  <Popover>
+    <PopoverTrigger asChild>
+      <Button variant="outline" size="icon">
+        <Cog className="h-4 w-4"/>
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent>
+      <div className="grid gap-4">
+        <div className="grid gap-2">
+          <h4 className="font-medium leading-none">Settings</h4>
+          <p className="text-sm text-muted-foreground">
+            Change how the algorithm is being executed
+          </p>
         </div>
-      </PopoverContent>
-    </Popover>
-  )
-}
+        <div className="flex items-center gap-4">
+          <Label htmlFor="delay" className="text-nowrap">Delay (ms)</Label>
+          <Input
+            id="delay"
+            type="number"
+            className="col-span-2 h-8"
+            value={delay}
+            onChange={(e) => setDelay(parseInt(e.target.value))}
+          />
+          
+        </div>
+        <div className="flex items-center gap-4">
+        <Label htmlFor="show-numbers">Explicitly show numbers</Label>
+          <Checkbox id="show-numbers" checked={explicit} onCheckedChange={(state) => setExplicit(!!state)} />
+        </div>
+      </div>
+    </PopoverContent>
+  </Popover>
+)
 
 type BarAnimation = 'animate-slide-left' | 'animate-slide-right'
 type BarColor = 'bg-primary/100' | 'bg-primary/60' | 'bg-primary/25'
@@ -242,11 +238,10 @@ const Bar = ({
   >
     {explicit && element}
     <div 
-        className={cn([
-          'flex-1 transition-color-transform rounded-tl-sm rounded-tr-sm', 
-          (color && color), (animation && animation)
-        ])}
+      className={cn([
+        'flex-1 transition-color-transform rounded-tl-sm rounded-tr-sm', 
+        (color && color), (animation && animation)
+      ])}
     />
-
   </div>
 )

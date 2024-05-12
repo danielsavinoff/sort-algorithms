@@ -81,7 +81,13 @@
 }
 
 @media (max-width: 1567px) {
-  #root > * > *:nth-child(3) {
+  #root > * > *:nth-child(n + 3) {
+    display: none;
+  }
+}
+
+@media (max-height: 600px) {
+  #root > * > *:nth-child(n + 2) {
     display: none;
   }
 }
