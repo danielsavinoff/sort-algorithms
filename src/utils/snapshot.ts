@@ -5,6 +5,8 @@ export type Snapshot = {
   sorted: number[],
   /** Indices of elements that are being compared to each other in {@link Snapshot.data} */
   selected: number[],
+  /** Amount of steps that took an algorithm */
+  steps?: number,
   /** An index of the element in {@link Snapshot.data} which will be pushed in {@link Snapshot.sorted} next */
   next?: number,
   /** An index of the element in {@link Snapshot.data} which will be moved smoothly to the left */
@@ -24,6 +26,7 @@ function saveSnapshot(
   const previousSnapshot = collection.at(-1)
 
   collection.push({
+    steps: (previousSnapshot?.steps || 0) + (typeof snapshot.steps === 'undefined' ? 1 : snapshot.steps),
     data: snapshot.data.slice(),
     sorted: [...(previousSnapshot ? previousSnapshot.sorted : []), ...snapshot.sorted],
     selected: snapshot.selected,

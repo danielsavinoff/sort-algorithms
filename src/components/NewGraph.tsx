@@ -35,6 +35,8 @@ import { GraphProps } from "@/components/Graph"
 import { useGraphListContext } from "@/providers/GraphListProvider"
 
 import selectionSort from "@/utils/selectionSort"
+import bubbleSort from "@/utils/bubbleSort"
+
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 
 function NewGraph() {
@@ -55,6 +57,14 @@ function NewGraph() {
         title: 'Selection Sort',
         key: crypto.randomUUID()
       }
+      break
+    case 'bubble-sort': 
+      newGraph = {
+        sort: bubbleSort,
+        title: 'Bubble Sort',
+        key: crypto.randomUUID()
+      }
+      break
   }
   
   const onSelect = (value: string) => {
@@ -151,6 +161,7 @@ const SelectAlgorithm = ({
         <SelectGroup>
           <SelectLabel>Sort algorithms</SelectLabel>
           <SelectItem value="selection-sort">Selection Sort</SelectItem>
+          <SelectItem value="bubble-sort">Bubble Sort</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

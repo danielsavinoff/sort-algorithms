@@ -33,10 +33,10 @@ function selectionSort(
     }
     
     // Not a part of the sort algoritm
-    saveSnapshot(snapshots, { data: arr, selected: [], sorted: [i] })
+    saveSnapshot(snapshots, { data: arr, selected: [], sorted: [i], steps: 0 })
   }
 
-  saveSnapshot(snapshots, { data: arr, selected: [], sorted: [arr.length - 1] })
+  saveSnapshot(snapshots, { data: arr, selected: [], sorted: [arr.length - 1], steps: 0 })
   // Returns a set of all states to render it later one-by-one
   return snapshots
 }
