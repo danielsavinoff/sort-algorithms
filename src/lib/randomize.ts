@@ -7,7 +7,7 @@ export function randomize(
   let num
 
   while (!num || nums.has(num)) {
-    num = Math.max(1, Math.floor(Math.random() * 99))
+    num = Math.max(10, Math.floor(Math.random() * 99))
   }
 
   nums.add(num)

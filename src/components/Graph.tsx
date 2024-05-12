@@ -18,6 +18,7 @@ import { Snapshot } from "@/utils/snapshot"
 
 import { useGraphListContext } from "@/providers/GraphListProvider"
 import { randomize } from "@/lib/randomize"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export interface GraphProps {
   title?: string,
@@ -39,7 +40,9 @@ function Graph({
   const [initialData, setInitialData] = useState<number[]>([])
 
   const [isRunning, setIsRunning] = useState<boolean>(false)
+  
   const [delay, setDelay] = useState<number>(500)
+  const [explicit, setExplicit] = useState<boolean>(true)
 
   // Set every needed variable on mount of the component
   useEffect(reset, [])
@@ -72,19 +75,30 @@ function Graph({
   }
 
   return(
-    <div className="grid gap-8 h-full w-full">
+    <div className="grid grid-rows-[max-content_1fr] h-full w-full">
       <div className="flex flex-col gap-4 h-max">
         <div className="flex justify-between items-center">
           <h2 className="text-3xl font-semibold text-foreground">{title}</h2>
           <p className="text-muted-foreground text-lg leading-none">Steps: {currentSnapshotIndex + 1}</p>
         </div>
-        <Controls run={run} reset={reset} remove={remove} isRunning={isRunning} delay={delay} setDelay={setDelay} />
+        <Controls 
+          run={run} 
+          reset={reset} 
+          remove={remove} 
+          isRunning={isRunning} 
+          delay={delay} 
+          setDelay={setDelay}
+          setExplicit={setExplicit}
+          explicit={explicit}
+        />
       </div>
-      <div className="border-b border-b-border pl-4 pr-4 flex gap-4 items-end">
+      <div className="border-b border-b-border pl-4 pr-4 flex gap-2 items-end">
         {currentSnapshotIndex < 0 ? (
           initialData.map(number => <Bar 
             element={number} 
             color="bg-primary/25"
+            explicit={explicit}
+            key={number}
           />)
         ) : (
           snapshots[currentSnapshotIndex].data.map((number, i) => {
@@ -104,7 +118,13 @@ function Graph({
             if (currentSnapshot.slideLeft === i) animation = "animate-slide-left"
             else if (currentSnapshot.slideRight === i) animation = "animate-slide-right"
 
-            return <Bar element={number} color={color} animation={animation} />
+            return <Bar 
+              element={number} 
+              color={color} 
+              animation={animation}
+              explicit={explicit}
+              key={number}
+            />
           })
         )}
       </div>
@@ -119,15 +139,19 @@ function Controls({
   reset,
   remove,
   setDelay,
+  setExplicit,
   delay,
-  isRunning
+  explicit,
+  isRunning,
 }: {
   run: () => void,
   reset: () => void,
   remove: () => void,
   setDelay: (ms: number) => void,
+  setExplicit: (checked: boolean) => void,
   delay: number,
   isRunning: boolean,
+  explicit: boolean
 }) {
   return(
     <div className="flex gap-2">
@@ -141,7 +165,7 @@ function Controls({
       <Button variant="outline" size="icon" onClick={reset}>
         <RotateCcw className="h-4 w-4"/>
       </Button>
-      <SettingsButton delay={delay} setDelay={setDelay}/>
+      <SettingsButton delay={delay} setDelay={setDelay} explicit={explicit} setExplicit={setExplicit}/>
       <Button variant={"outline"} size={"icon"} onClick={remove}>
         <X className="h-4 w-4" />
       </Button>
@@ -151,10 +175,14 @@ function Controls({
 
 function SettingsButton({
   delay,
-  setDelay
+  setDelay,
+  explicit,
+  setExplicit
 }: {
   setDelay: (ms: number) => void,
   delay: number,
+  explicit: boolean,
+  setExplicit: (checked: boolean) => void
 }) {
   return(
     <Popover>
@@ -171,8 +199,8 @@ function SettingsButton({
               Change how the algorithm is being executed
             </p>
           </div>
-          <div className="grid grid-cols-3 items-center gap-4">
-            <Label htmlFor="delay">Delay (ms)</Label>
+          <div className="flex items-center gap-4">
+            <Label htmlFor="delay" className="text-nowrap">Delay (ms)</Label>
             <Input
               id="delay"
               type="number"
@@ -180,6 +208,11 @@ function SettingsButton({
               value={delay}
               onChange={(e) => setDelay(parseInt(e.target.value))}
             />
+            
+          </div>
+          <div className="flex items-center gap-4">
+          <Label htmlFor="show-numbers">Explicitly show numbers</Label>
+            <Checkbox id="show-numbers" checked={explicit} onCheckedChange={(state) => setExplicit(!!state)} />
           </div>
         </div>
       </PopoverContent>
@@ -190,25 +223,30 @@ function SettingsButton({
 type BarAnimation = 'animate-slide-left' | 'animate-slide-right'
 type BarColor = 'bg-primary/100' | 'bg-primary/60' | 'bg-primary/25'
 
-function Bar({
+const Bar = ({
   element,
+  explicit,
   animation,
   color
 }: {
   element: number,
+  explicit?: boolean
   animation?: BarAnimation,
   color?: BarColor
-}) {
-  return(
+}) => (
+  <div 
+    className="flex-1 justify-between font-semibold text-sm text-primary text-center flex flex-col"
+    style={{ 
+      height: `${element}%`,
+    }}
+  >
+    {explicit && element}
     <div 
-      style={{ 
-        height: `${element}%`,
-      }}
-      className={cn([
-        'flex-1 h-full transition-color-transform rounded-tl-sm rounded-tr-sm', 
-        (color && color), (animation && animation)
-      ])}
-      key={element}
+        className={cn([
+          'flex-1 transition-color-transform rounded-tl-sm rounded-tr-sm', 
+          (color && color), (animation && animation)
+        ])}
     />
-  )
-}
+
+  </div>
+)
