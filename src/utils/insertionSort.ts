@@ -33,9 +33,8 @@ function insertionSort(
     }
   }
 
-  // Not a part of the sort algoritm
   saveSnapshot(snapshots, { data: arr, selected: [], sorted: [...arr.map((_,i) => i) ], steps: 0 })
-
+  // Returns a set of all states to render it later one-by-one
   return snapshots
 }
 
